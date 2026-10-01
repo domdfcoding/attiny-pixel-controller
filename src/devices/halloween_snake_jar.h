@@ -13,7 +13,7 @@ Crystal formation with blue flicker or colour cycle animations
 // // #define MIN_BRIGHTNESS (MAX_BRIGHTNESS / 3) * 2
 // #define MIN_BRIGHTNESS BRIGHTNESS - 30
 
-unsigned long intervals[] = {30, 30, 30, 30};  // speed for each pattern
+unsigned long intervals[] = {30, 30, 30, 30}; // speed for each pattern
 
 uint32_t PALE_BLUE = leds.Color(0, 255, 200, 0);
 uint32_t WARM_WHITE = leds.Color(255, 224, 160, 0);

@@ -7,10 +7,10 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 #define BRIGHTNESS 40
 #define NUM_PATTERNS 1
 
-#include "animations/rainbow.h"
 #include "animations/colour_wipe.h"
+#include "animations/rainbow.h"
 
-unsigned long intervals [] = { 20, } ; // speed for each pattern
+unsigned long intervals[] = {20}; // speed for each pattern
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	rainbow_nb();

@@ -9,12 +9,13 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 #define SKULL_COLOUR 0xff800000
 #include "common.h"
 
-unsigned long intervals [] = { 40 } ; // speed for each pattern
+unsigned long intervals[] = {40}; // speed for each pattern
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {
 	case 0:
-		if (enabled) leds.setBrightness(BRIGHTNESS);
+		if (enabled)
+			leds.setBrightness(BRIGHTNESS);
 
 		leds.setPixelColor(0, PUMPKIN_COLOUR);
 		leds.setPixelColor(1, PUMPKIN_COLOUR);

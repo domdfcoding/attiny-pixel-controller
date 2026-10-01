@@ -2,8 +2,8 @@
 All LEDs slowly fade/flicker between different brightnesses, lit up blue
 */
 
-#include <Arduino.h>
 #include "common.h"
+#include <Arduino.h>
 
 // Max/min brightness for plusation animation
 #define MAX_BRIGHTNESS BRIGHTNESS
@@ -11,7 +11,6 @@ All LEDs slowly fade/flicker between different brightnesses, lit up blue
 #ifndef MIN_BRIGHTNESS
 #define MIN_BRIGHTNESS MAX_BRIGHTNESS / 3
 #endif
-
 
 void pulsate_nb(uint32_t colour, uint32_t ramp_rate) {
 	// ramp_rate is rate of change in brightness

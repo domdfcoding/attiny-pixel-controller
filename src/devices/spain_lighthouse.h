@@ -6,10 +6,10 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 #define BRIGHTNESS 255
 #define NUM_PATTERNS 1
 
-#include "animations/solid.h"
 #include "animations/pulsate.h"
+#include "animations/solid.h"
 
-unsigned long intervals [] = { 40 } ; // speed for each pattern
+unsigned long intervals[] = {40}; // speed for each pattern
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

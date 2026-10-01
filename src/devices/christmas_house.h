@@ -9,12 +9,11 @@
 
 #include "animations/pulsate.h"
 
-unsigned long intervals[] = {10};		  // speed for each pattern
+unsigned long intervals[] = {10}; // speed for each pattern
 
 // uint32_t CANDLE = leds.Color(255, 160, 0, 0);
 // uint32_t CANDLE = leds.Color(235, 152, 52, 0);
 uint32_t CANDLE = leds.Color(235, 50, 0, 0);
-
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

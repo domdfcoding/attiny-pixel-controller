@@ -1,8 +1,8 @@
-#pragma once 
+#pragma once
 #include <Arduino.h>
 // #include <tinyNeoPixel.h>
-#include <tinyNeoPixel_Static.h>
 #include <EEPROM.h>
+#include <tinyNeoPixel_Static.h>
 
 // Pin mapping
 // Button 2 changes mode
@@ -14,7 +14,7 @@
 #define PIXEL PIN_PA7
 
 #elif defined(PILL_POT)
-#define BTN1 PIN_PA4  // Unused
+#define BTN1 PIN_PA4 // Unused
 #define BTN2 PIN_PA2
 #define PIXEL PIN_PA1
 
@@ -39,7 +39,7 @@
 #define PIXEL 3 // PA7
 // #define GPIO 0 // PA4
 
-#endif 
+#endif
 
 // EEPROM Setting locations
 #define EEPROM_ENABLED_ADDRESS 0
@@ -48,7 +48,7 @@
 #define USE_EEPROM 0
 #endif
 
-#define DEBOUNCE_DELAY 200  // ms
+#define DEBOUNCE_DELAY 200 // ms
 
 #ifndef NUMLEDS
 #error "NUMLEDS not defined"
@@ -72,20 +72,18 @@
 
 bool enabled = true; // Should the LEDs be on?
 uint8_t pattern = 0;
-unsigned long lastUpdate = 0;				  // for millis() when last update occoured
+unsigned long lastUpdate = 0; // for millis() when last update occoured
 
 // tinyNeoPixel leds = tinyNeoPixel(NUMLEDS, PIXEL, COLOUR_ORDER);
 // byte pixels[NUMLEDS * 3];
 byte pixels[NUMLEDS * 4];
 tinyNeoPixel leds = tinyNeoPixel(NUMLEDS, PIXEL, COLOUR_ORDER, pixels);
 
-extern unsigned long intervals[];		  // speed for each pattern
+extern unsigned long intervals[]; // speed for each pattern
 // unsigned long patternInterval = intervals[0]; // time between steps in the pattern
 unsigned long patternInterval; // time between steps in the pattern
 
 extern void updatePattern(uint8_t pat); // call the pattern currently being created
-
-
 
 // Some common colours
 uint32_t RED = leds.Color(255, 0, 0, 0);
@@ -112,7 +110,6 @@ uint32_t colorwheel(uint32_t pos) {
 	return leds.Color(pos * 3, 0, 255 - pos * 3);
 }
 
-
 void setup_controller() {
 	// Configure buttons
 	pinMode(BTN1, INPUT_PULLUP);
@@ -127,7 +124,7 @@ void setup_controller() {
 	delay(100);
 
 	// // Load settings from EEPROM
-	if (USE_EEPROM){
+	if (USE_EEPROM) {
 		enabled = EEPROM.read(EEPROM_ENABLED_ADDRESS);
 		pattern = EEPROM.read(EEPROM_PATTERN_ADDRESS);
 	}
@@ -135,9 +132,6 @@ void setup_controller() {
 		pattern = 0;					  // wrap round if too big
 	patternInterval = intervals[pattern]; // set speed for this pattern
 }
-
-
-
 
 void loop_controller() {
 	// static uint8_t pattern = 0, last_btn1_reading, last_btn2_reading;
@@ -152,7 +146,8 @@ void loop_controller() {
 		// Reset pattern
 		pattern = 0;
 		patternInterval = intervals[pattern]; // set speed for this pattern
-		if (USE_EEPROM) EEPROM.update(EEPROM_PATTERN_ADDRESS, pattern);
+		if (USE_EEPROM)
+			EEPROM.update(EEPROM_PATTERN_ADDRESS, pattern);
 		return;
 	}
 
@@ -162,14 +157,16 @@ void loop_controller() {
 			pattern = 0;					  // wrap round if too big
 		patternInterval = intervals[pattern]; // set speed for this pattern
 		leds.fill(0);
-		if (USE_EEPROM) EEPROM.update(EEPROM_PATTERN_ADDRESS, pattern);
+		if (USE_EEPROM)
+			EEPROM.update(EEPROM_PATTERN_ADDRESS, pattern);
 		delay(DEBOUNCE_DELAY); // debounce delay
 	}
 	last_btn2_reading = btn2_reading; // save for next time
 
 	if (last_btn1_reading == HIGH && btn1_reading == LOW) {
 		enabled = !enabled;
-		if (USE_EEPROM) EEPROM.update(EEPROM_ENABLED_ADDRESS, enabled);
+		if (USE_EEPROM)
+			EEPROM.update(EEPROM_ENABLED_ADDRESS, enabled);
 		delay(DEBOUNCE_DELAY); // debounce delay
 	}
 	last_btn1_reading = btn1_reading; // save for next time
@@ -186,4 +183,3 @@ void loop_controller() {
 		}
 	}
 }
-

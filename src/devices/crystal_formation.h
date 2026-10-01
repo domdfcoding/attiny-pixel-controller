@@ -8,7 +8,7 @@
 
 #include "animations/rainbow.h"
 
-unsigned long intervals [] = { 20 } ; // speed for each pattern
+unsigned long intervals[] = {20}; // speed for each pattern
 
 void updatePattern(uint8_t pat) {
 	switch (pat) {

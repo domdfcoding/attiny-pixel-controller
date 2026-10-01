@@ -9,7 +9,7 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 uint32_t colorwheel_2(uint32_t pos) {
 	// Input a value 0 to 255 to get a color value.
 	// The colours are a transition r - g - b - back to r.
-	pos = pos%255;
+	pos = pos % 255;
 
 	if (pos < 0 or pos > 255) {
 		return leds.Color(0, 0, 0);
@@ -25,28 +25,28 @@ uint32_t colorwheel_2(uint32_t pos) {
 	return leds.Color(0, pos * 3, 255 - pos * 3);
 }
 
-
-uint8_t color_to_wheel_pos(uint8_t r, uint8_t g, uint8_t b){
+uint8_t color_to_wheel_pos(uint8_t r, uint8_t g, uint8_t b) {
 	uint8_t pos = 0;
 
-	if (r == 0) pos= (g/3 + 170);
-    else if (g == 0) pos = (b/3 + 85);
-    else if (b == 0) pos = (r/3);
+	if (r == 0)
+		pos = (g / 3 + 170);
+	else if (g == 0)
+		pos = (b / 3 + 85);
+	else if (b == 0)
+		pos = (r / 3);
 
 	return pos % 255;
-    
 }
 
-uint8_t color_to_wheel_pos(uint32_t color){
+uint8_t color_to_wheel_pos(uint32_t color) {
 	uint8_t b = color & 0xFF;
 	uint8_t g = (color >> 8) & 0xFF;
 	uint8_t r = (color >> 16) & 0xFF;
-	
+
 	return color_to_wheel_pos(r, g, b);
 }
 
-
-void rainbow_along_nb_2(bool reversed=false) { // modified from Adafruit example to make it a state machine
+void rainbow_along_nb_2(bool reversed = false) { // modified from Adafruit example to make it a state machine
 	if (enabled) {
 		leds.setBrightness(BRIGHTNESS);
 	}
@@ -54,30 +54,30 @@ void rainbow_along_nb_2(bool reversed=false) { // modified from Adafruit example
 	static uint16_t j = 0;
 	int ii;
 	for (int i = 0; i < leds.numPixels(); i++) {
-	// for (int i = leds.numPixels()-1; i >= 0; i--) {
-		uint16_t rc_index = (i * 256 /leds.numPixels()) + j;
-		if (reversed) ii = leds.numPixels() - 1 - i;
-		else ii = i;
+		// for (int i = leds.numPixels()-1; i >= 0; i--) {
+		uint16_t rc_index = (i * 256 / leds.numPixels()) + j;
+		if (reversed)
+			ii = leds.numPixels() - 1 - i;
+		else
+			ii = i;
 		leds.setPixelColor(ii, colorwheel(rc_index & 255));
 	}
 
 	leds.show();
-	
+
 	j++;
-	
-	if (j >= 256){
+
+	if (j >= 256) {
 		j = 0;
 	}
 	lastUpdate = millis(); // time for next change to the display
 }
 
+uint16_t fade_reds[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+uint16_t fade_blues[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+uint16_t fade_greens[14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
-uint16_t fade_reds [14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-uint16_t fade_blues [14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-uint16_t fade_greens [14] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-void fade_along_nb_2(bool reversed=false) {
+void fade_along_nb_2(bool reversed = false) {
 	if (enabled) {
 		leds.setBrightness(BRIGHTNESS);
 	}
@@ -90,107 +90,132 @@ void fade_along_nb_2(bool reversed=false) {
 
 	int ii;
 	for (int i = 0; i <= num_to_edit; i++) {
-		if (mode == 0){
+		if (mode == 0) {
 			uint16_t current_r = fade_reds[i];
 			current_r += step;
-			if (current_r > 255) current_r = 255;
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (current_r > 255)
+				current_r = 255;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, 0, 0, 0));
 			fade_reds[i] = current_r;
-		}
-		else if (mode == 1){
+		} else if (mode == 1) {
 			uint16_t current_r = fade_reds[i];
 			uint16_t current_b = fade_blues[i];
 
 			current_b += step;
-			if (current_b > 128) current_b = 128;
+			if (current_b > 128)
+				current_b = 128;
 
 			current_r -= step;
-			if (current_r < 128) current_r = 128;
+			if (current_r < 128)
+				current_r = 128;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, 0, current_b, 0));
 			fade_reds[i] = current_r;
 			fade_blues[i] = current_b;
-		}	
-		else if (mode == 2){
+		} else if (mode == 2) {
 			int16_t current_r = fade_reds[i];
 			uint16_t current_b = fade_blues[i];
 
 			current_b += step;
-			if (current_b > 255) current_b = 255;
+			if (current_b > 255)
+				current_b = 255;
 
 			current_r -= step;
-			if (current_r < 0) current_r = 0;
+			if (current_r < 0)
+				current_r = 0;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, 0, current_b, 0));
 			fade_reds[i] = current_r;
 			fade_blues[i] = current_b;
-		}	else if (mode == 3){
+		} else if (mode == 3) {
 			uint16_t current_b = fade_blues[i];
 			uint16_t current_g = fade_greens[i];
 
 			current_g += step;
-			if (current_g > 128) current_g = 128;
+			if (current_g > 128)
+				current_g = 128;
 
 			current_b -= step;
-			if (current_b < 128) current_b = 128;
+			if (current_b < 128)
+				current_b = 128;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(0, current_g, current_b, 0));
 			fade_greens[i] = current_g;
 			fade_blues[i] = current_b;
-		}			else if (mode == 4){
+		} else if (mode == 4) {
 			int16_t current_b = fade_blues[i];
 			uint16_t current_g = fade_greens[i];
 
 			current_g += step;
-			if (current_g > 255) current_g = 255;
+			if (current_g > 255)
+				current_g = 255;
 
 			current_b -= step;
-			if (current_b < 0) current_b = 0;
+			if (current_b < 0)
+				current_b = 0;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(0, current_g, current_b, 0));
 			fade_greens[i] = current_g;
 			fade_blues[i] = current_b;
-		}		else if (mode == 5){
+		} else if (mode == 5) {
 			uint16_t current_g = fade_greens[i];
 			uint16_t current_r = fade_reds[i];
 
 			current_r += step;
-			if (current_r > 128) current_r = 128;
+			if (current_r > 128)
+				current_r = 128;
 
 			current_g -= step;
-			if (current_g < 128) current_g = 128;
+			if (current_g < 128)
+				current_g = 128;
 
-						if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, current_g, 0, 0));
 			fade_reds[i] = current_r;
 			fade_greens[i] = current_g;
-		}			else if (mode == 6){
+		} else if (mode == 6) {
 			int16_t current_g = fade_greens[i];
 			uint16_t current_r = fade_reds[i];
 
 			current_r += step;
-			if (current_r > 255) current_r = 255;
+			if (current_r > 255)
+				current_r = 255;
 
 			current_g -= step;
-			if (current_g < 0) current_g = 0;
+			if (current_g < 0)
+				current_g = 0;
 
-						if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, current_g, 0, 0));
 			fade_reds[i] = current_r;
 			fade_greens[i] = current_g;
-		}	
+		}
 	}
 
 	num_to_edit++;
@@ -202,174 +227,191 @@ void fade_along_nb_2(bool reversed=false) {
 			if (fade_reds[0] == 255) {
 				num_to_edit = 0;
 				mode = 1;
-				}
+			}
 		} else if (mode == 1) {
-			if (fade_blues[0] == 128  && fade_blues[13] == 128 && fade_reds[13] == 128) {
+			if (fade_blues[0] == 128 && fade_blues[13] == 128 && fade_reds[13] == 128) {
 				num_to_edit = 0;
 				mode = 2;
-				}
+			}
 		} else if (mode == 2) {
-			if (fade_blues[0] == 255 && fade_blues[12] == 255) {  // Shouldn't 12 be 13?
+			if (fade_blues[0] == 255 && fade_blues[12] == 255) { // Shouldn't 12 be 13?
 				num_to_edit = 0;
 				mode = 3;
-				}
+			}
 		} else if (mode == 3) {
-			if (fade_greens[0] == 128  && fade_greens[13] == 128 && fade_blues[13] == 128) {
+			if (fade_greens[0] == 128 && fade_greens[13] == 128 && fade_blues[13] == 128) {
 				num_to_edit = 0;
 				mode = 4;
-				}
+			}
 		} else if (mode == 4) {
-			if (fade_greens[0] == 255 && fade_greens[12] == 255) {  // Shouldn't 12 be 13?
+			if (fade_greens[0] == 255 && fade_greens[12] == 255) { // Shouldn't 12 be 13?
 				num_to_edit = 0;
 				mode = 5;
-				}
+			}
 		} else if (mode == 5) {
-			if (fade_reds[0] == 128  && fade_reds[13] == 128 && fade_greens[13] == 128) {
+			if (fade_reds[0] == 128 && fade_reds[13] == 128 && fade_greens[13] == 128) {
 				num_to_edit = 0;
 				mode = 6;
-				}
+			}
 		} else if (mode == 6) {
-			if (fade_reds[0] == 255 && fade_reds[12] == 255) {  // Shouldn't 12 be 13?
+			if (fade_reds[0] == 255 && fade_reds[12] == 255) { // Shouldn't 12 be 13?
 				num_to_edit = 0;
 				mode = 1;
-				}
+			}
 		}
 	}
 
-
-
-
 	leds.show();
-	
 
 	lastUpdate = millis(); // time for next change to the display
 }
 
+uint16_t fade_reds_diag[6] = {0, 0, 0, 0, 0, 0};
+uint16_t fade_blues_diag[6] = {0, 0, 0, 0, 0, 0};
+uint16_t fade_greens_diag[6] = {0, 0, 0, 0, 0, 0};
 
-uint16_t fade_reds_diag [6] = {0, 0, 0, 0, 0, 0};
-uint16_t fade_blues_diag [6] = {0, 0, 0, 0, 0, 0};
-uint16_t fade_greens_diag [6] = {0, 0, 0, 0, 0, 0};
-
-
-void step_diagonal(int mode, uint8_t num_to_edit, uint8_t step = 5, bool reversed=false){
-		if (enabled) {
+void step_diagonal(int mode, uint8_t num_to_edit, uint8_t step = 5, bool reversed = false) {
+	if (enabled) {
 		leds.setBrightness(BRIGHTNESS);
 	}
 
-
 	int ii;
 	for (int i = 0; i <= num_to_edit; i++) {
-		if (mode == 0){
+		if (mode == 0) {
 			uint16_t current_r = fade_reds_diag[i];
 			current_r += step;
-			if (current_r > 255) current_r = 255;
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (current_r > 255)
+				current_r = 255;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			leds.setPixelColor(ii, leds.Color(current_r, 0, 0, 0));
 			fade_reds_diag[i] = current_r;
-		}
-		else if (mode == 1){
+		} else if (mode == 1) {
 			uint16_t current_r = fade_reds_diag[i];
 			uint16_t current_b = fade_blues_diag[i];
 
 			current_b += step;
-			if (current_b > 128) current_b = 128;
+			if (current_b > 128)
+				current_b = 128;
 
 			current_r -= step;
-			if (current_r < 128) current_r = 128;
+			if (current_r < 128)
+				current_r = 128;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(current_r, 0, current_b, 0));
 			fade_reds_diag[i] = current_r;
 			fade_blues_diag[i] = current_b;
-		}	
-		else if (mode == 2){
+		} else if (mode == 2) {
 			int16_t current_r = fade_reds_diag[i];
 			uint16_t current_b = fade_blues_diag[i];
 
 			current_b += step;
-			if (current_b > 255) current_b = 255;
+			if (current_b > 255)
+				current_b = 255;
 
 			current_r -= step;
-			if (current_r < 0) current_r = 0;
+			if (current_r < 0)
+				current_r = 0;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(current_r, 0, current_b, 0));
 			fade_reds_diag[i] = current_r;
 			fade_blues_diag[i] = current_b;
-		}	else if (mode == 3){
+		} else if (mode == 3) {
 			uint16_t current_b = fade_blues_diag[i];
 			uint16_t current_g = fade_greens_diag[i];
 
 			current_g += step;
-			if (current_g > 128) current_g = 128;
+			if (current_g > 128)
+				current_g = 128;
 
 			current_b -= step;
-			if (current_b < 128) current_b = 128;
+			if (current_b < 128)
+				current_b = 128;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(0, current_g, current_b, 0));
 			fade_greens_diag[i] = current_g;
 			fade_blues_diag[i] = current_b;
-		}			else if (mode == 4){
+		} else if (mode == 4) {
 			int16_t current_b = fade_blues_diag[i];
 			uint16_t current_g = fade_greens_diag[i];
 
 			current_g += step;
-			if (current_g > 255) current_g = 255;
+			if (current_g > 255)
+				current_g = 255;
 
 			current_b -= step;
-			if (current_b < 0) current_b = 0;
+			if (current_b < 0)
+				current_b = 0;
 
-			if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(0, current_g, current_b, 0));
 			fade_greens_diag[i] = current_g;
 			fade_blues_diag[i] = current_b;
-		}		else if (mode == 5){
+		} else if (mode == 5) {
 			uint16_t current_g = fade_greens_diag[i];
 			uint16_t current_r = fade_reds_diag[i];
 
 			current_r += step;
-			if (current_r > 128) current_r = 128;
+			if (current_r > 128)
+				current_r = 128;
 
 			current_g -= step;
-			if (current_g < 128) current_g = 128;
+			if (current_g < 128)
+				current_g = 128;
 
-						if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(current_r, current_g, 0, 0));
 			fade_reds_diag[i] = current_r;
 			fade_greens_diag[i] = current_g;
-		}			else if (mode == 6){
+		} else if (mode == 6) {
 			int16_t current_g = fade_greens_diag[i];
 			uint16_t current_r = fade_reds_diag[i];
 
 			current_r += step;
-			if (current_r > 255) current_r = 255;
+			if (current_r > 255)
+				current_r = 255;
 
 			current_g -= step;
-			if (current_g < 0) current_g = 0;
+			if (current_g < 0)
+				current_g = 0;
 
-						if (reversed) ii = leds.numPixels() - 1 - i;
-			else ii = i;
+			if (reversed)
+				ii = leds.numPixels() - 1 - i;
+			else
+				ii = i;
 			// leds.setPixelColor(ii, leds.Color(current_r, current_g, 0, 0));
 			fade_reds_diag[i] = current_r;
 			fade_greens_diag[i] = current_g;
-		}	
+		}
 	}
 }
 
-struct BN2EResult
-{
-   int mode;
-   uint8_t num_to_edit;
+struct BN2EResult {
+	int mode;
+	uint8_t num_to_edit;
 };
 
-BN2EResult bump_num2edit(int mode, uint8_t num_to_edit){
+BN2EResult bump_num2edit(int mode, uint8_t num_to_edit) {
 
 	num_to_edit++;
 
@@ -380,78 +422,89 @@ BN2EResult bump_num2edit(int mode, uint8_t num_to_edit){
 			if (fade_reds_diag[0] == 255) {
 				num_to_edit = 0;
 				mode = 1;
-				}
+			}
 		} else if (mode == 1) {
-			if (fade_blues_diag[0] == 128  && fade_blues_diag[5] == 128 && fade_reds_diag[5] == 128) {
+			if (fade_blues_diag[0] == 128 && fade_blues_diag[5] == 128 && fade_reds_diag[5] == 128) {
 				num_to_edit = 0;
 				mode = 2;
-				}
+			}
 		} else if (mode == 2) {
 			if (fade_blues_diag[0] == 255 && fade_blues_diag[5] == 255) {
 				num_to_edit = 0;
 				mode = 3;
-				}
+			}
 		} else if (mode == 3) {
-			if (fade_greens_diag[0] == 128  && fade_greens_diag[5] == 128 && fade_blues_diag[5] == 128) {
+			if (fade_greens_diag[0] == 128 && fade_greens_diag[5] == 128 && fade_blues_diag[5] == 128) {
 				num_to_edit = 0;
 				mode = 4;
-				}
+			}
 		} else if (mode == 4) {
 			if (fade_greens_diag[0] == 255 && fade_greens_diag[5] == 255) {
 				num_to_edit = 0;
 				mode = 5;
-				}
+			}
 		} else if (mode == 5) {
-			if (fade_reds_diag[0] == 128  && fade_reds_diag[5] == 128 && fade_greens_diag[5] == 128) {
+			if (fade_reds_diag[0] == 128 && fade_reds_diag[5] == 128 && fade_greens_diag[5] == 128) {
 				num_to_edit = 0;
 				mode = 6;
-				}
+			}
 		} else if (mode == 6) {
 			if (fade_reds_diag[0] == 255 && fade_reds_diag[5] == 255) {
 				num_to_edit = 0;
 				mode = 1;
-				}
+			}
 		}
 	}
 
 	BN2EResult result = {mode, num_to_edit};
 	return result;
-
-
 }
 
-
-void fade_diagonal_nb(uint8_t step = 5, bool reversed=false) {
+void fade_diagonal_nb(uint8_t step = 5, bool reversed = false) {
 	static int mode = 0;
 	static uint8_t num_to_edit = 0;
 	step_diagonal(mode, num_to_edit, step, reversed);
-	
+
 	// Actually set the LEDs
 	int diag_idx = 0;
-	leds.setPixelColor(14-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	
-	diag_idx ++;
-	leds.setPixelColor(13-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(6-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(5-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(14 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(12-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(7-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(4-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(13 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(6 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(5 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(11-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(8-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(3-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(12 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(7 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(4 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(10-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(9-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(2-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(11 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(8 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(3 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(1-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(10 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(9 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(2 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+
+	diag_idx++;
+	leds.setPixelColor(1 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
 	BN2EResult result = bump_num2edit(mode, num_to_edit);
 	mode = result.mode;
@@ -462,35 +515,49 @@ void fade_diagonal_nb(uint8_t step = 5, bool reversed=false) {
 	lastUpdate = millis(); // time for next change to the display
 }
 
-void fade_chevron_nb(uint8_t step = 5, bool reversed=false) {
+void fade_chevron_nb(uint8_t step = 5, bool reversed = false) {
 	static int mode = 0;
 	static uint8_t num_to_edit = 0;
 	step_diagonal(mode, num_to_edit, step, reversed);
-	
+
 	// Actually set the LEDs
 	int diag_idx = 0;
-	leds.setPixelColor(14-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(6-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(5-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(14 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(6 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(5 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(13-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(7-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(4-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(13 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(7 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(4 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(12-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(8-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(3-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(12 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(8 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(3 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(11-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(9-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(2-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(11 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(9 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(2 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
-	diag_idx ++;
-	leds.setPixelColor(10-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
-	leds.setPixelColor(1-1, leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	diag_idx++;
+	leds.setPixelColor(10 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
+	leds.setPixelColor(1 - 1,
+					   leds.Color(fade_reds_diag[diag_idx], fade_greens_diag[diag_idx], fade_blues_diag[diag_idx]));
 
 	BN2EResult result = bump_num2edit(mode, num_to_edit);
 	mode = result.mode;

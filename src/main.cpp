@@ -2,8 +2,7 @@
 // #include <tinyNeoPixel.h>
 #include <tinyNeoPixel_Static.h>
 
-#define DECAY_RATE 1  // For fade out
-
+#define DECAY_RATE 1 // For fade out
 
 #if defined(BLUE_CRYSTAL_FORMATION)
 #include "devices/blue_crystal_formation.h"
@@ -45,7 +44,7 @@
 #include "devices/dad_crown_cork_lamp.h"
 #elif defined(PILL_POT)
 #include "devices/demo.h"
-#else 
+#else
 #error No device selected
 #endif
 

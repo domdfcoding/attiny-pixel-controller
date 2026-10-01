@@ -2,23 +2,21 @@
 Demonstation with full-strip colour cycle, and colour cycle along the strip
 */
 
-#define NUMLEDS 15  // 12 + 3 fake ones for timing
+#define NUMLEDS 15 // 12 + 3 fake ones for timing
 #define BRIGHTNESS 200
 #define NUM_PATTERNS 4
 
-#include "animations/rainbow.h"
 #include "animations/colour_wipe.h"
+#include "animations/rainbow.h"
 
-unsigned long intervals [] = { 20, 100, 10, 100} ; // speed for each pattern
+unsigned long intervals[] = {20, 100, 10, 100}; // speed for each pattern
 
 /// @brief All LEDs off
 void off() {
-  leds.fill(0);
-  leds.show();
-  lastUpdate = millis(); // time for next change to the display
+	leds.fill(0);
+	leds.show();
+	lastUpdate = millis(); // time for next change to the display
 }
-
-
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

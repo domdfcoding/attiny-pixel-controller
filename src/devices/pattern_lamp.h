@@ -2,17 +2,17 @@
 Lamp from The Range with a nice pattern
 */
 
-#define NUMLEDS 17  // 12 + 5 fake ones for timing
+#define NUMLEDS 17 // 12 + 5 fake ones for timing
 #define BRIGHTNESS 200
 #define NUM_PATTERNS 10
 // #define NUM_PATTERNS 16
 
-#include "animations/rainbow.h"
 #include "animations/colour_wipe.h"
+#include "animations/rainbow.h"
 #include "animations/solid.h"
 
-unsigned long intervals [] = { 30, 110, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100} ; // speed for each pattern
-
+// speed for each pattern
+unsigned long intervals[] = {30, 110, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 // /// @brief Fill the LED strip with one colour, then the next
 // void colour_wipe_nb_alt() { // modified from Adafruit example to make it a state machine
@@ -37,33 +37,29 @@ unsigned long intervals [] = { 30, 110, 50, 100, 100, 100, 100, 100, 100, 100, 1
 //   lastUpdate = millis(); // time for next change to the display
 // }
 
-
 /// @brief Fill the LED strip with one colour, then the next, with a delay between colours
 void colour_wipe_delay() { // modified from Adafruit example to make it a state machine
 	if (enabled) {
 		leds.setBrightness(BRIGHTNESS);
 	}
 
-  static int i =0;
-  static int col_idx =0;
-    leds.setPixelColor(i, wipe_colours[col_idx]);
-    leds.show();
+	static int i = 0;
+	static int col_idx = 0;
+	leds.setPixelColor(i, wipe_colours[col_idx]);
+	leds.show();
 
+	i++;
+	if (i >= (leds.numPixels() + 50)) {
+		i = 0;
+		col_idx++;
 
-  i++;
-  if(i >= (leds.numPixels() + 50)){
-    i = 0;
-	col_idx++;
-   
-    // leds.fill(0); // blank out strip
-  }
-  if (col_idx > 5) {
-    col_idx = 0;
-  };
-  lastUpdate = millis(); // time for next change to the display
+		// leds.fill(0); // blank out strip
+	}
+	if (col_idx > 5) {
+		col_idx = 0;
+	};
+	lastUpdate = millis(); // time for next change to the display
 }
-
-
 
 /// @brief fade up to one colour, then down and back up to another
 void breathe() { // modified from Adafruit example to make it a state machine
@@ -75,11 +71,11 @@ void breathe() { // modified from Adafruit example to make it a state machine
 		leds.setBrightness(BRIGHTNESS * brightness_multiplier / 100);
 	}
 
-  static int col_idx =0;
+	static int col_idx = 0;
 	for (int i = 0; i < leds.numPixels(); i++) {
 		leds.setPixelColor(i, wipe_colours[col_idx]);
 	}
-    leds.show();
+	leds.show();
 
 	brightness_multiplier += fade_direction;
 
@@ -90,16 +86,12 @@ void breathe() { // modified from Adafruit example to make it a state machine
 		col_idx++;
 	}
 
-   
-    // leds.fill(0); // blank out strip
-  if (col_idx > 5) {
-    col_idx = 0;
-  };
-  lastUpdate = millis(); // time for next change to the display
+	// leds.fill(0); // blank out strip
+	if (col_idx > 5) {
+		col_idx = 0;
+	};
+	lastUpdate = millis(); // time for next change to the display
 }
-
-
-
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

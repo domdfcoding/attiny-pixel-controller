@@ -3,14 +3,14 @@
 Demonstation with full-strip colour cycle, and colour cycle along the strip
 */
 
-#define NUMLEDS 25  // 22 + 3 fake ones for timing
+#define NUMLEDS 25 // 22 + 3 fake ones for timing
 #define BRIGHTNESS 50
 #define NUM_PATTERNS 4
 
-#include "animations/rainbow.h"
 #include "animations/colour_wipe.h"
+#include "animations/rainbow.h"
 
-unsigned long intervals [] = { 120, 20, 2, 80} ; // speed for each pattern
+unsigned long intervals[] = {120, 20, 2, 80}; // speed for each pattern
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

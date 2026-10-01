@@ -9,7 +9,7 @@ Crystal formation with blue flicker or colour cycle animations
 #include "animations/pulsate.h"
 #include "animations/rainbow.h"
 
-unsigned long intervals[] = {10, 30};		  // speed for each pattern
+unsigned long intervals[] = {10, 30}; // speed for each pattern
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {
