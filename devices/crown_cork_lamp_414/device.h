@@ -11,8 +11,8 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 // unsigned long intervals [NUM_PATTERNS] = { 10, 50 } ; // speed for each pattern
 unsigned long intervals[NUM_PATTERNS] = {10, 50, 50}; // speed for each pattern
 
+#include "crown_cork_lamp_base.h"
 #include "common.h"
-#include "devices/crown_cork_lamp_base.h"
 
 void updatePattern(uint8_t pat) { // call the pattern currently being created
 	switch (pat) {

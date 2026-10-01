@@ -13,8 +13,8 @@ Demonstation with full-strip colour cycle, and colour cycle along the strip
 // unsigned long intervals[NUM_PATTERNS] = {10, 50};
 unsigned long intervals[NUM_PATTERNS] = {10, 50, 50, 10, 50, 50, 50, 30, 100, 100, 30, 100, 100, 100};
 
+#include "crown_cork_lamp_base.h"
 #include "common.h"
-#include "devices/crown_cork_lamp_base.h"
 
 uint32_t wipe_colours[] = {RED, YELLOW, GREEN, CYAN, BLUE, PURPLE};
 
